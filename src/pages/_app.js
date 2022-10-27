@@ -1,36 +1,19 @@
 import "../styles/globals.css";
 import "react-toastify/dist/ReactToastify.css";
 
-import { ToastContainer } from "react-toastify";
 import Navbar from "@/components/layouts/nav";
 
 import { WagmiConfig, createClient, configureChains } from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
-
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
+// import { Web3AuthConnector } from "@web3auth/web3auth-wagmi-connector";
+import { TorusConnector, defaultChain } from "src/config";
+import { ToastContainer } from "react-toastify";
 
 function MyApp({ Component, pageProps }) {
-  const polygonChain = {
-    id: 137,
-    name: "Polygon",
-    network: "polygon",
-    nativeCurrency: {
-      decimals: 18,
-      name: "Matic",
-      symbol: "MATIC",
-    },
-    rpcUrls: {
-      default: "https://polygon-rpc.com",
-    },
-    blockExplorers: {
-      default: { name: "Polygonscan", url: "https://polygonscan.com" },
-    },
-    testnet: false,
-  };
-
   const { chains, provider, webSocketProvider } = configureChains(
-    [polygonChain],
+    [defaultChain],
     [publicProvider()]
   );
 
@@ -45,6 +28,25 @@ function MyApp({ Component, pageProps }) {
           chainId: 137,
         },
       }),
+      new TorusConnector({
+        chains,
+        options: {
+          buildEnv: "testing",
+          enableLogging: true,
+          buttonPosition: "bottom-left",
+          showTorusButton: true,
+        },
+      }),
+      // new Web3AuthConnector({
+      //   chains,
+      //   options: {
+      //     enableLogging: true,
+      //     clientId:
+      //       "BPIlEtkvvoWqtQoQu6nN-4PKpRZISyEna7In8-NZ28fYxsrzfE1qqqlagnV2TH7jSAMBM5j_zXGW-IuwwnuexoM", // Get your own client id from https://dashboard.web3auth.io
+      //     network: "mainnet", // web3auth network, "mainnet", "cyan", or "aqua"
+      //     chainId: "0x1", // chainId that you want to connect with
+      //   },
+      // }),
     ],
     provider,
     webSocketProvider,
