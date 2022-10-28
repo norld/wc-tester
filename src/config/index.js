@@ -1,4 +1,4 @@
 import { TorusConnector } from "./torusConfig";
-import { defaultChain } from "./defaultChainConfig";
+import { defaultChain, chainList } from "./chainListConfig";
 
-export { TorusConnector, defaultChain };
+export { TorusConnector, defaultChain, chainList };

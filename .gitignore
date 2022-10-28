@@ -3,3 +3,9 @@ package-lock.json
 yarn.lock
 .next
 dist
+yarn-error.log
+.yarn
+.yarnrc.yml
+.pnp.cjs
+.pnp.loader.mjs
+.DS_Store

@@ -17,6 +17,7 @@ export default function EIPList({ eipName, eipCode, eipHandler }) {
 
   const network = useSwitchNetwork({
     chainId: changeChainId,
+    throwForSwitchChainNotSupported: true,
     onError(error) {
       toast(<ErrorNotify err={error.message} />);
     },

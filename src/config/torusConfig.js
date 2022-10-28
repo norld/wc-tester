@@ -14,24 +14,10 @@ export class TorusConnector extends Connector {
     this.torus = new Torus({
       buttonPosition: config.options.buttonPosition, // default: bottom-left
     });
-    this.address = null;
   }
 
-  async connect({ chainId }) {
+  async connect() {
     try {
-      // const storage = localStorage.getItem("torus-app");
-      // if (storage) {
-      //   console.log("storage available", );
-      //   return {
-      //     account: storage.selectedAddress,
-      //     chain: {
-      //       id: storage.networkId,
-      //       unsupported: true,
-      //     },
-      //     provider: this.torus.provider,
-      //   };
-      // }
-
       await this.torus.init({
         buildEnv: this.options.buildEnv,
         enableLogging: this.options.enableLogging,
@@ -39,63 +25,89 @@ export class TorusConnector extends Connector {
         useLocalStorage: true,
       });
       await this.torus.login();
-      const { typeOfLogin, verifierId } = await this.torus.getUserInfo();
 
-      console.log(typeOfLogin, verifierId);
-      this.address = await this.torus.getPublicAddress({
-        verifier: typeOfLogin,
-        verifierId,
-      });
-      console.log(this.address);
-      console.log(this.torus, "this.torus");
-      this.signer = new ethers.providers.Web3Provider(this.torus.provider);
-      return {
-        account: this.address.data,
-        chain: {
-          id: this.torus.ethereum.chainId,
-          unsupported: true,
-        },
-        provider: this.torus.provider,
-      };
-    } catch (e) {
-      console.log(e);
+      const provider = await this.torus.provider;
+
+      if (provider.on) {
+        provider.on("accountsChanged", this.onAccountsChanged);
+        provider.on("chainChanged", this.onChainChanged);
+        provider.on("disconnect", this.onDisconnect);
+      }
+
+      // Check if there is a user logged in
+      const isAuthenticated = await this.isAuthorized();
+
+      // Check if we have a chainId, in case of error just assign 0 for legacy
+      let chainId;
+      try {
+        chainId = await this.getChainId();
+      } catch (e) {
+        chainId = 0;
+      }
+
+      // if there is a user logged in, return the user
+      if (isAuthenticated) {
+        const signer = await this.getSigner();
+        const account = await signer.getAddress();
+
+        return {
+          account,
+          chain: {
+            id: chainId,
+            unsupported: false,
+          },
+          provider,
+        };
+      }
+    } catch (error) {
+      console.log(error);
     }
   }
 
   async disconnect() {
-    console.log("disconnect");
-    await torus.cleanUp();
     await this.torus.logout();
+    await this.torus.cleanUp();
+  }
+
+  async switchNetwork() {
+    console.log("sicing");
   }
 
   async getAccount() {
-    console.log("getAccount");
-    return await this.address.data;
+    return await this.signer.getAddress();
   }
   async getChainId() {
-    console.log("getChainId");
-    return this.torus.ethereum.chainId;
+    if (this.torus) return this.torus.ethereum.chainId;
+    throw new Error("Chain ID is not defined");
   }
+
   async getProvider() {
-    console.log("getProvider", this.torus.provider);
     return this.torus.provider;
   }
+
   async getSigner() {
+    this.signer = new ethers.providers.Web3Provider(this.torus.provider);
     return this.signer.getSigner();
   }
+
   async onAccountsChanged(accounts) {
-    console.log("onAccountsChanged");
+    console.log("onAccountsChanged", accounts);
   }
+
   async onChainChanged(chainId) {
-    console.log("onChainChanged");
-    await this.torus.setProvider({
-      host: "https://ethboston1.skalenodes.com:10062", // mandatory
-      chainId: chainId, // optional
-    });
-    return this.torus.ethereum.chainId;
+    console.log("onChainChanged", chainId);
+    // await this.torus.setProvider({
+    //   host: "https://ethboston1.skalenodes.com:10062", // mandatory
+    //   chainId: chainId, // optional
+    // });
+    // return this.torus.ethereum.chainId;
+  }
+
+  async isAuthorized() {
+    return this.torus.isLoggedIn;
   }
 
   async onDisconnect() {
-    return await this.torus.logout();
+    return this.disconnect();
   }
 }
