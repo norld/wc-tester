@@ -1,14 +1,14 @@
 import { Fragment, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/20/solid";
-import { chainList } from "src/config";
+import { useNetwork } from "wagmi";
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function ChainList() {
-  const [selected, setSelected] = useState(chainList[0]);
-  console.log(chainList);
+  const { chain, chains } = useNetwork();
+  const [selected, setSelected] = useState(chains[0]);
 
   return (
     <Listbox value={selected} onChange={setSelected}>
@@ -18,7 +18,7 @@ export default function ChainList() {
             <div className="inline-flex divide-x divide-indigo-600 rounded-md shadow-sm">
               <div className="inline-flex divide-x divide-indigo-600 rounded-md shadow-sm">
                 <Listbox.Button className="inline-flex items-center rounded border border-transparent bg-indigo-500 py-2 px-4 text-white shadow-sm">
-                  <p className="text-sm font-medium">{selected.name}</p>
+                  {/* <p className="text-sm font-medium">{selected.name}</p> */}
                 </Listbox.Button>
               </div>
             </div>
@@ -31,9 +31,9 @@ export default function ChainList() {
               leaveTo="opacity-0"
             >
               <Listbox.Options className="absolute right-0 z-10 mt-2 w-72 origin-top-right divide-y divide-gray-200 overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                {chainList.map((option) => (
+                {chains.map((option, i) => (
                   <Listbox.Option
-                    key={option.title}
+                    key={i}
                     className={({ active }) =>
                       classNames(
                         active ? "text-white bg-indigo-500" : "text-gray-900",

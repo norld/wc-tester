@@ -10,6 +10,7 @@ export class TorusConnector extends Connector {
 
   constructor(config) {
     super(config);
+    this.chains = config.chains;
     this.options = config.options;
     this.torus = new Torus({
       buttonPosition: config.options.buttonPosition, // default: bottom-left
@@ -65,11 +66,17 @@ export class TorusConnector extends Connector {
   }
 
   async disconnect() {
-    await this.torus.logout();
-    await this.torus.cleanUp();
+    try {
+      if (this.torus) {
+        await this.torus.logout();
+        await this.torus.cleanUp();
+      }
+    } catch (e) {
+      console.log(e);
+    }
   }
 
-  async switchNetwork() {
+  switchNetwork() {
     console.log("sicing");
   }
 
@@ -77,6 +84,7 @@ export class TorusConnector extends Connector {
     return await this.signer.getAddress();
   }
   async getChainId() {
+    console.log(this.chains);
     if (this.torus) return this.torus.ethereum.chainId;
     throw new Error("Chain ID is not defined");
   }
@@ -90,6 +98,10 @@ export class TorusConnector extends Connector {
     return this.signer.getSigner();
   }
 
+  async isAuthorized() {
+    return this.torus && this.torus.isLoggedIn;
+  }
+
   async onAccountsChanged(accounts) {
     console.log("onAccountsChanged", accounts);
   }
@@ -101,10 +113,6 @@ export class TorusConnector extends Connector {
     //   chainId: chainId, // optional
     // });
     // return this.torus.ethereum.chainId;
-  }
-
-  async isAuthorized() {
-    return this.torus.isLoggedIn;
   }
 
   async onDisconnect() {

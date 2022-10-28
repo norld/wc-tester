@@ -1,5 +1,5 @@
 import Connect from "@/components/button/connect";
-import ChainList from "@/components/button/chain";
+// import ChainList from "@/components/button/chain";
 
 export default function Navbar() {
   return (
@@ -18,8 +18,8 @@ export default function Navbar() {
             </div>
           </div>
           <div className="flex flex-wrap">
-            <ChainList />
-            <div className="px-1"></div>
+            {/* <ChainList />
+            <div className="px-1"></div> */}
             <Connect />
           </div>
         </div>
