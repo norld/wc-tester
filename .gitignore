@@ -9,3 +9,4 @@ yarn-error.log
 .pnp.cjs
 .pnp.loader.mjs
 .DS_Store
+embed

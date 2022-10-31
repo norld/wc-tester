@@ -8,7 +8,7 @@ import { publicProvider } from "wagmi/providers/public";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 // import { Web3AuthConnector } from "@web3auth/web3auth-wagmi-connector";
-import { TorusConnector, defaultChain } from "src/config";
+import { TorusConnector, defaultChain, UpbondConnector } from "src/config";
 import { ToastContainer } from "react-toastify";
 
 function MyApp({ Component, pageProps }) {
@@ -29,6 +29,15 @@ function MyApp({ Component, pageProps }) {
         },
       }),
       new TorusConnector({
+        chains,
+        options: {
+          buildEnv: "testing",
+          enableLogging: true,
+          buttonPosition: "bottom-left",
+          showTorusButton: true,
+        },
+      }),
+      new UpbondConnector({
         chains,
         options: {
           buildEnv: "testing",

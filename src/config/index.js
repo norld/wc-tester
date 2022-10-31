@@ -1,4 +1,5 @@
 import { TorusConnector } from "./torusConfig";
+import { UpbondConnector } from "./upbondConfig";
 import { defaultChain, chainList } from "./chainListConfig";
 
-export { TorusConnector, defaultChain, chainList };
+export { UpbondConnector, TorusConnector, defaultChain, chainList };
