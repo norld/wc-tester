@@ -1,5 +1,4 @@
 import { Connector, Chain } from "wagmi";
-// import { CoolWalletOptions, CoolWalletProvider } from 'cool-wallet-sdk'
 import Upbond from "@upbond/upbond-embed";
 import { ethers } from "ethers";
 
