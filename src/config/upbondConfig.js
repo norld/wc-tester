@@ -1,6 +1,6 @@
 import { Connector, Chain } from "wagmi";
-// import { CoolWalletOptions, CoolWalletProvider } from 'cool-wallet-sdk'
-import Upbond from "@upbond/upbond-embed";
+// import Upbond from "@upbond/upbond-embed";
+import Upbond from "../../embed/upbondEmbed.esm.js";
 import { ethers } from "ethers";
 
 export class UpbondConnector extends Connector {
