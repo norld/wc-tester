@@ -13,7 +13,7 @@
     "@heroicons/react": "^2.0.12",
     "@tailwindcss/forms": "^0.5.3",
     "@toruslabs/torus-embed": "^1.36.6",
-    "@upbond/upbond-embed": "^1.0.2",
+    "@upbond/embed": "^1.1.12",
     "ethers": "^5.7.2",
     "next": "13.0.0",
     "react": "18.2.0",
