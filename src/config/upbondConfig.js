@@ -1,5 +1,6 @@
 import { Connector, Chain } from "wagmi";
-import Upbond from "@upbond/upbond-embed";
+// import Upbond from "@upbond/upbond-embed";
+import Upbond from "../embed/upbondEmbed.esm";
 import { ethers } from "ethers";
 
 export class UpbondConnector extends Connector {
@@ -18,37 +19,51 @@ export class UpbondConnector extends Connector {
 
   async connect() {
     try {
+      console.log("Connecting...", this.upbond);
       await this.upbond.init({
         buildEnv: this.options.buildEnv,
         enableLogging: this.options.enableLogging,
         showTorusButton: this.options.showTorusButton,
         useLocalStorage: true,
       });
-      await this.upbond.login();
+      console.log("this.upbond", this.upbond);
+      // await this.upbond.login();
 
+      console.log("provider", this.upbond);
       const provider = await this.upbond.provider;
-
       if (provider.on) {
-        provider.on("accountsChanged", this.onAccountsChanged);
+        // provider.on("accountsChanged", this.onAccountsChanged);
         provider.on("chainChanged", this.onChainChanged);
-        provider.on("disconnect", this.onDisconnect);
+        // provider.on("connect", console.log("Connecting..."));
+        // provider.on("disconnect", this.onDisconnect);
       }
 
       // Check if there is a user logged in
       const isAuthenticated = await this.isAuthorized();
 
       // Check if we have a chainId, in case of error just assign 0 for legacy
-      let chainId;
+      let chainId = 1;
       try {
         chainId = await this.getChainId();
+        chainId = 1;
       } catch (e) {
-        chainId = 0;
+        chainId = 1;
       }
+
+      console.log("kemungkinan cuy", isAuthenticated);
 
       // if there is a user logged in, return the user
       if (isAuthenticated) {
+        const account = "0x597feEc90911564e2675D51EFC60aB956AC96c90";
+
+        console.log("@Getting access");
+
         const signer = await this.getSigner();
-        const account = await signer.getAddress();
+        console.log("@signer", signer);
+        // const account = await signer.getAddress();
+        // console.log("@account", account);
+        console.log("@provider", provider);
+        console.log("@chainId", chainId);
 
         return {
           account,
@@ -66,10 +81,11 @@ export class UpbondConnector extends Connector {
 
   async disconnect() {
     try {
-      if (this.upbond) {
-        await this.upbond.logout();
-        await this.upbond.cleanUp();
-      }
+      console.log("@disconnecting...");
+      // if (this.upbond) {
+      //   await this.upbond.logout();
+      //   await this.upbond.cleanUp();
+      // }
     } catch (e) {
       console.log(e);
     }
@@ -83,8 +99,9 @@ export class UpbondConnector extends Connector {
     return await this.signer.getAddress();
   }
   async getChainId() {
-    console.log(this.chains);
-    if (this.upbond) return this.upbond.ethereum.chainId;
+    return 1;
+    console.log("sicing", this.upbond.ethereum);
+    if (this.upbond) return this.upbond.provider.chainId;
     throw new Error("Chain ID is not defined");
   }
 
@@ -115,6 +132,6 @@ export class UpbondConnector extends Connector {
   }
 
   async onDisconnect() {
-    return this.disconnect();
+    return disconnect();
   }
 }

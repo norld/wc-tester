@@ -12,10 +12,7 @@ import { TorusConnector, defaultChain, UpbondConnector } from "src/config";
 import { ToastContainer } from "react-toastify";
 
 function MyApp({ Component, pageProps }) {
-  const { chains, provider, webSocketProvider } = configureChains(
-    [defaultChain],
-    [publicProvider()]
-  );
+  const { chains, provider, webSocketProvider } = configureChains([defaultChain], [publicProvider()]);
 
   const client = createClient({
     autoConnect: true,
@@ -40,7 +37,7 @@ function MyApp({ Component, pageProps }) {
       new UpbondConnector({
         chains,
         options: {
-          buildEnv: "testing",
+          buildEnv: "new-dev-local",
           enableLogging: true,
           buttonPosition: "bottom-left",
           showTorusButton: true,
@@ -65,12 +62,7 @@ function MyApp({ Component, pageProps }) {
       <WagmiConfig client={client}>
         <Navbar />
         <Component {...pageProps} />
-        <ToastContainer
-          position="top-right"
-          autoClose={6000}
-          closeOnClick
-          pauseOnHover
-        />
+        <ToastContainer position="top-right" autoClose={6000} closeOnClick pauseOnHover />
       </WagmiConfig>
     </>
   );
