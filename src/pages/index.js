@@ -1,6 +1,29 @@
 import EIPCard from "@/components/card/list";
 import { useAccount } from "wagmi";
+import { useRouter } from "next/router";
+import { UpbondConnector } from "src/config";
+import Connect from "@/components/button/connect";
+import { useConnect } from "wagmi";
+import { useEffect } from "react";
 export default function Index() {
+  const router = useRouter();
+  const { connect, chains } = useConnect();
+  const { selectedAddress } = router.query;
+
+  useEffect(() => {
+    if (selectedAddress) {
+      const upbondLogin = new UpbondConnector({
+        chains,
+        options: {
+          buildEnv: "new-dev-local",
+          enableLogging: true,
+          buttonPosition: "bottom-left",
+          showTorusButton: true,
+        },
+      });
+      connect({ connector: upbondLogin });
+    }
+  }, [selectedAddress]);
   const { isConnected } = useAccount();
   if (isConnected) return <EIPCard />;
   else
@@ -10,12 +33,8 @@ export default function Index() {
           <div aria-hidden="true" className="absolute" />
 
           <div className="mx-auto flex max-w-3xl flex-col items-center py-32 px-6 text-center sm:py-64 lg:px-0">
-            <h1 className="text-4xl font-bold tracking-tight text-black lg:text-6xl">
-              Wallet Connect Tester
-            </h1>
-            <div className="mt-4 text-xl text-black">
-              Please connect wallet first to use overpower tester
-            </div>
+            <h1 className="text-4xl font-bold tracking-tight text-black lg:text-6xl">Wallet Connect Tester</h1>
+            <div className="mt-4 text-xl text-black">Please connect wallet first to use overpower tester</div>
           </div>
         </div>
       </div>

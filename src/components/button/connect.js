@@ -15,15 +15,13 @@ export default function Connect() {
   });
   const { connector: activeConnector, isConnected, address } = useAccount();
   const { disconnect } = useDisconnect();
-  const { connect, connectors, error, isLoading, pendingConnector } =
-    useConnect();
+  const { connect, connectors, error, isLoading, pendingConnector } = useConnect();
 
   const balanceState = useBalance({
     addressOrName: address,
   });
   useEffect(() => {
-    if (!balanceState.isLoading && balanceState.data !== undefined)
-      setBalance(balanceState.data);
+    if (!balanceState.isLoading && balanceState.data !== undefined) setBalance(balanceState.data);
   }, [balanceState.isLoading]);
   return (
     <>
@@ -43,10 +41,7 @@ export default function Connect() {
           <div>
             <Menu.Button className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100">
               Connect Wallet
-              <ChevronDownIcon
-                className="-mr-1 ml-2 h-5 w-5"
-                aria-hidden="true"
-              />
+              <ChevronDownIcon className="-mr-1 ml-2 h-5 w-5" aria-hidden="true" />
             </Menu.Button>
           </div>
 
@@ -63,15 +58,9 @@ export default function Connect() {
               <div className="py-1">
                 {connectors.map((connector) => (
                   <Menu.Item key={connector.id}>
-                    <button
-                      disabled={!connector.ready}
-                      className="block px-4 py-2 text-sm"
-                      onClick={() => connect({ connector })}
-                    >
+                    <button disabled={!connector.ready} className="block px-4 py-2 text-sm" onClick={() => connect({ connector })}>
                       {connector.name}
-                      {isLoading &&
-                        pendingConnector?.id === connector.id &&
-                        " (connecting)"}
+                      {isLoading && pendingConnector?.id === connector.id && " (connecting)"}
                     </button>
                   </Menu.Item>
                 ))}

@@ -9,7 +9,7 @@ export const listEIP = [
     eipName: "Sign",
     eipCode: "EIP-712",
     eipFunc: "eth_sign",
-    available: false,
+    available: true,
   },
   {
     eipName: "Sign Typed Data",

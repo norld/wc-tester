@@ -35,6 +35,23 @@ export const chainList = [
     testnet: false,
   },
   {
+    id: 80001,
+    name: "Polygon Testnet",
+    network: "mumbai",
+    nativeCurrency: {
+      decimals: 18,
+      name: "Matic",
+      symbol: "MATIC",
+    },
+    rpcUrls: {
+      default: "https://polygon-testnet.public.blastapi.io",
+    },
+    blockExplorers: {
+      default: { name: "Polygonscan", url: "https://polygonscan.com" },
+    },
+    testnet: false,
+  },
+  {
     id: 1,
     name: "Ethereum",
     network: "mainnet",
