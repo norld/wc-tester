@@ -15,7 +15,7 @@ export default function Index() {
       const upbondLogin = new UpbondConnector({
         chains,
         options: {
-          buildEnv: "new-dev-local",
+          buildEnv: "v2_development",
           enableLogging: true,
           buttonPosition: "bottom-left",
           showTorusButton: true,

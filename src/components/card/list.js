@@ -15,7 +15,11 @@ export default function EIPCard({}) {
   const { chain } = useNetwork();
 
   const [changeChainId, setChangeChainId] = useState(chain.id);
+  const [render, setRender] = useState(false);
 
+  useEffect(() => {
+    setRender(true);
+  }, []);
   const signMessage = useSignMessage({
     message: "Welcome to wallet connect tester 😎",
     onError(error) {
@@ -117,47 +121,37 @@ export default function EIPCard({}) {
     chain.id && chain.id === 1 ? setChangeChainId(137) : setChangeChainId(1);
   }, [chain.id]);
   return (
-    <div className="container mx-auto">
-      <div className="bg-white shadow sm:rounded-lg mt-8">
-        <div className="px-4 py-5 sm:p-6">
-          <div className="text-lg font-medium leading-6 text-gray-900">
-            List EIP
+    render && (
+      <div className="container mx-auto">
+        <div className="bg-white shadow sm:rounded-lg mt-8">
+          <div className="px-4 py-5 sm:p-6">
+            <div className="text-lg font-medium leading-6 text-gray-900">List EIP</div>
+            {listEIP.map((item, i) => {
+              return (
+                <EIPList
+                  key={i}
+                  eipName={item.eipName}
+                  eipCode={item.eipCode}
+                  eipHandler={item.eipFunc}
+                  available={item.available}
+                  handlerRequest={handlerRequest}
+                />
+              );
+            })}
           </div>
-          {listEIP.map((item, i) => {
-            return (
-              <EIPList
-                key={i}
-                eipName={item.eipName}
-                eipCode={item.eipCode}
-                eipHandler={item.eipFunc}
-                available={item.available}
-                handlerRequest={handlerRequest}
-              />
-            );
-          })}
         </div>
       </div>
-    </div>
+    )
   );
 }
 
-export function EIPList({
-  eipName,
-  eipCode,
-  eipHandler,
-  handlerRequest,
-  available,
-}) {
+export function EIPList({ eipName, eipCode, eipHandler, handlerRequest, available }) {
   return (
     <div className="mt-5">
       <div className="rounded-md bg-gray-50 px-6 py-5 sm:flex sm:items-start sm:justify-between">
         <div className="sr-only">Visa</div>
         <div className="sm:flex sm:items-start">
-          <svg
-            className="h-8 w-auto sm:h-6 sm:flex-shrink-0"
-            viewBox="0 0 36 24"
-            aria-hidden="true"
-          >
+          <svg className="h-8 w-auto sm:h-6 sm:flex-shrink-0" viewBox="0 0 36 24" aria-hidden="true">
             <rect width={36} height={24} fill="#224DBA" rx={4} />
             <path
               fill="#fff"

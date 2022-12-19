@@ -1,6 +1,6 @@
 import { Connector, Chain } from "wagmi";
 // import Upbond from "@upbond/upbond-embed";
-import Upbond from "../embed/upbondEmbed.esm";
+import Upbond from "@upbond/upbond-embed";
 import { ethers } from "ethers";
 
 export class UpbondConnector extends Connector {
