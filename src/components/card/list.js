@@ -1,20 +1,14 @@
 import { listEIP } from "src/config/eipListConfig";
-import {
-  useSignMessage,
-  useNetwork,
-  useSwitchNetwork,
-  useSignTypedData,
-  usePrepareSendTransaction,
-  useSendTransaction,
-  chainId,
-} from "wagmi";
+import { useSignMessage, useNetwork, useSwitchNetwork, useSignTypedData, useSendTransaction } from "wagmi";
 import { toast } from "react-toastify";
 import { useState, useEffect } from "react";
+import { utils, BigNumber } from "ethers";
 
 export default function EIPCard({}) {
   const { chain } = useNetwork();
 
-  const [changeChainId, setChangeChainId] = useState(chain.id);
+  const [chainId, setChainId] = useState(1);
+  const [changeChainId, setChangeChainId] = useState(chainId);
   const [render, setRender] = useState(false);
 
   useEffect(() => {
@@ -23,6 +17,7 @@ export default function EIPCard({}) {
   const signMessage = useSignMessage({
     message: "Welcome to wallet connect tester 😎",
     onError(error) {
+      console.log("@error signMessage", error);
       if (error.reason) toast(<ErrorNotify err={error.reason} />);
       else toast(<ErrorNotify err={error.message} />);
     },
@@ -35,7 +30,7 @@ export default function EIPCard({}) {
     domain: {
       name: "Ether Mail",
       version: "1",
-      chainId: chain.id,
+      chainId: 80001,
       verifyingContract: "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
     },
     types: {
@@ -68,16 +63,14 @@ export default function EIPCard({}) {
     },
   });
 
-  const { config } = usePrepareSendTransaction({
+  const send = useSendTransaction({
+    mode: "recklesslyUnprepared",
     request: {
       to: "0x0A194EDb637c0C3007387a8Bf821C5C7C8274642",
-      value: 0,
+      value: BigNumber.from("100000000000"),
     },
-  });
-
-  const send = useSendTransaction({
-    ...config,
     onError(error) {
+      console.log("@error send transaction", error);
       if (error.reason) toast(<ErrorNotify err={error.reason} />);
       else toast(<ErrorNotify err={error.message} />);
     },
@@ -111,15 +104,16 @@ export default function EIPCard({}) {
       case "wallet_addEthereumChain":
         return network.switchNetwork();
       case "eth_sendTransaction":
-        return send.sendTransaction();
+        return send.sendTransaction?.();
       case "eth_signTransaction":
         return "ba";
     }
   };
 
   useEffect(() => {
-    chain.id && chain.id === 1 ? setChangeChainId(137) : setChangeChainId(1);
-  }, [chain.id]);
+    chain && chain.id && chain.id === 1 ? setChangeChainId(137) : setChangeChainId(1);
+    chain && chain.id && setChainId(chain.id);
+  }, [chain]);
   return (
     render && (
       <div className="container mx-auto">

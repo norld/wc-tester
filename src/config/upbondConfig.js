@@ -19,13 +19,13 @@ export class UpbondConnector extends Connector {
     try {
       console.log("Connecting...", this.upbond);
       await this.upbond.init({
-        buildEnv: "new-dev-local",
+        buildEnv: "v2_new-dev-local",
         // isUsingDirect: false,
         skipDialog: false,
         dappRedirectUri: `${window.location.origin}`,
         network: {
-          host: "https://polygon-rpc.com",
-          chainId: 137,
+          host: "https://polygon-testnet.public.blastapi.io",
+          chainId: 80001,
           networkName: "Matic",
           blockExplorer: "",
           ticker: "MATIC",
@@ -163,10 +163,9 @@ export class UpbondConnector extends Connector {
   async getChainId() {
     // return 1;
     console.log("sicing", this.upbond.ethereum);
-    if (this.upbond) return this.upbond.ethereum.chainId;
+    if (this.upbond) return this.upbond.ethereum.chainId || 80001;
     throw new Error("Chain ID is not defined");
   }
-
   async getProvider() {
     return this.upbond.provider;
   }

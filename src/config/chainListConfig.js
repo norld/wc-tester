@@ -1,19 +1,19 @@
 export const defaultChain = {
-  id: 137,
-  name: "Polygon",
-  network: "polygon",
+  id: 80001,
+  name: "Polygon Testnet",
+  network: "mumbai",
   nativeCurrency: {
     decimals: 18,
     name: "Matic",
     symbol: "MATIC",
   },
   rpcUrls: {
-    default: "https://polygon-rpc.com",
+    default: "https://polygon-testnet.public.blastapi.io",
   },
   blockExplorers: {
     default: { name: "Polygonscan", url: "https://polygonscan.com" },
   },
-  testnet: false,
+  testnet: true,
 };
 
 export const chainList = [
