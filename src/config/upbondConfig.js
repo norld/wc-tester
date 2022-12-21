@@ -19,7 +19,7 @@ export class UpbondConnector extends Connector {
     try {
       console.log("Connecting...", this.upbond);
       await this.upbond.init({
-        buildEnv: "v2_new-dev-local",
+        buildEnv: "v2_development",
         // isUsingDirect: false,
         skipDialog: false,
         dappRedirectUri: `${window.location.origin}`,
